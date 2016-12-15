@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>TwitterInterface</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>GetVisitPathServlet</servlet-name>
+    <servlet-class>com.summerproject.servlet.GetVisitPathServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>GetAllSitesListServlet</servlet-name>
+    <servlet-class>com.summerproject.servlet.GetAllSitesListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>GetHighlightHtmlServlet</servlet-name>
+    <servlet-class>com.summerproject.servlet.GetHighlightHtmlServlet</servlet-class>
+  </servlet>
+  
+  <context-param>
+    <param-name>resources</param-name>
+    <param-value>/WEB-INF/resources/</param-value>
+  </context-param>
+  
+  <servlet-mapping>
+    <servlet-name>GetVisitPathServlet</servlet-name>
+    <url-pattern>/GetVisitPathServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GetAllSitesListServlet</servlet-name>
+    <url-pattern>/GetAllSitesListServlet</url-pattern>
+  </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>GetHighlightHtmlServlet</servlet-name>
+    <url-pattern>/GetHighlightHtmlServlet</url-pattern>
+  </servlet-mapping>
+  
+</web-app>
