@@ -1,0 +1,149 @@
+<script src="include/hammer.js"></script>
+<script src="include/util.js"></script>
+
+<input type="hidden" id="panup" value="" />
+<input type="hidden" id="pandown" value="" />
+<input type="hidden" id="panleft" value="" />
+<input type="hidden" id="panright" value="" />
+<input type="hidden" id="press" value="" />
+
+<script language="javascript">
+    
+    var username = document.getElementById("username").value;
+    var pageType = document.getElementById("pagetype").value;
+    var url = document.getElementById("url").value;
+    var query = document.getElementById("query").value;
+    
+    var container = document.getElementById('crystalcontainer');
+
+    var action = "load";
+    var time = new Date().getTime();
+
+    function logReading() {
+      var interval = new Date().getTime() - time;
+      updatePageEvent(action + "->unload", interval);
+      time = new Date().getTime();
+    }
+
+    window.onload = function() {
+      action = "load";
+      time = new Date().getTime();
+    }
+
+    window.onfocus = function() {
+      action = "focus";
+      time = new Date().getTime();
+    }
+
+    window.onmousemove = function(event) {
+      if(event.pageY <= 5) {
+        var interval = new Date().getTime() - time;	
+        updatePageEvent(action + "->unload", interval);
+        time = new Date().getTime();
+      }
+    }
+
+    window.onblur = function() {
+      var interval = new Date().getTime() - time;
+      updatePageEvent(action + "->blur", interval);
+      time = new Date().getTime();
+    }
+
+    window.onbeforeunload = function() {
+      var interval = new Date().getTime() - time;
+      updatePageEvent(action + "->unload", interval);
+      time = new Date().getTime();
+    }
+
+    if(container != null) {
+        var hammer = new Hammer(container);
+        hammer.get('pan').set({direction: Hammer.DIRECTION_ALL});
+
+        // listen to events...
+        hammer.on("panup pandown panleft panright panend press pressup", function(event) {
+            var type = event.type;
+
+            var deltaX = event.deltaX;
+            var deltaY = event.deltaY;
+            var deltaTime = event.deltaTime;
+            var distance = event.distance;
+
+            var direction = event.direction;
+            var angle = event.angle;
+
+            var velocityX = event.velocityX;
+            var velocityY = event.velocityY;
+            var velocity = event.velocity;
+
+            var touches = event.scale;
+
+            var centerX = event.center.x;
+            var centerY = event.center.y;
+
+            var events = type + " " + touches + " " + centerX + " " + centerY + " "
+              + deltaX + " " + deltaY + " " + deltaTime + " " + distance + " "
+              + velocityX + " " + velocityY + " " + velocity + " "
+              + angle + " " + direction + "::";
+
+            if(type == 'panup') {
+              document.getElementById('panup').value += events;
+            } else if(type == 'pandown') {
+              document.getElementById('pandown').value += events;
+            } else if(type == 'panleft') {
+              document.getElementById('panleft').value += events;
+            } else if(type == 'panright') {
+              document.getElementById('panright').value += events;
+            }else if(type == 'press') {
+              document.getElementById('press').value += events;
+            } else if(type == 'panend' || type == 'pressup') {
+              var html = event.target.innerHTML;
+
+            if(event.target.tagName.toLowerCase() == 'strong'
+              || event.target.tagName.toLowerCase() == 'span') {
+                    html = event.target.parentElement.innerHTML;
+            }
+
+            var panupdata = document.getElementById('panup').value;
+            var pandowndata = document.getElementById('pandown').value;
+            var pressdata = document.getElementById('press').value;
+            var panleftdata = document.getElementById('panleft').value;
+            var panrightdata = document.getElementById('panright').value;
+            var data = "<pl>" + panleftdata + "</pl> " + "<pr>" + panrightdata + "</pr>"
+                    + "<pu>" + panupdata + "</pu> " + "<pd>" + pandowndata + "</pd>"
+                    + "<ps>" + pressdata + "</ps> ";
+              updatelogs(data, html);
+            }	
+        });
+    }
+
+    function updatelogs(event, touchHtml){
+        var urlSend = "updatelogs.jsp?logType=mtievent&username=" + username
+            + "&query=" + query + "&pageType=" + pageType + "&event="
+            + event + "&pageUrl=" + url
+            + "&title=" + encodeURIComponent(document.title)
+            + "&touchHtml=" + encodeURIComponent(touchHtml);
+        sendRequest(urlSend, resetEventData);
+    }
+    
+    function resetEventData(text) {
+        document.getElementById('panup').value = "";
+        document.getElementById('pandown').value = "";
+        document.getElementById('press').value = "";
+        document.getElementById('panleft').value = "";
+        document.getElementById('panright').value = "";
+        return text;
+    }
+
+    function updatePageEvent(eventType, interval) {
+        var urlSend = "updatelogs.jsp?logType=pageevent&username=" + username
+            + "&query=" + query + "&pageType=" + pageType + "&pageUrl="
+            + url + "&eventType=" + eventType + "&interval=" + interval
+            + "&title=" + encodeURIComponent(document.title);
+        sendRequest(urlSend, postSend);
+    }
+    
+    function postSend(text) {
+        return text;
+    }
+    
+</script>

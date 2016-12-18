@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@include file="common.jsp"%>
 
 <html>
@@ -6,9 +8,9 @@
 <script src="include/util.js"></script>
 </head>
 <body>
-	<form method="get" action="index.jsp" id="form-query">	
-	<input type = "hidden" name = "username" value = "<%=username%>" id = "hidden-username"/>
-	<%@include file="include/start-header.jsp"%>	
+	<form method="get" action="search.jsp" id="form-query">	
+            <input type="hidden" name="username" id="username" value="<%=username%>" id = "hidden-username"/>
+            <%@include file="include/start-header.html"%>
 	</form>
 	
 	<center>

@@ -1,29 +1,23 @@
-<%@ page language="java" import="edu.pitt.sis.recommender.*" pageEncoding="utf-8" %>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="common.jsp"%>
 
 <%
-  final int LEN = 5;
-  final int MAX = 3;
+  final int MAX_SESSION_DIFF = 5;
+  final int MAX_ITEMS = 3;
   // Uses the current and the past sessions to rank query terms, queries and clicks
   int maxSessionid = currentSessionId;
-  int minSessionid = currentSessionId - LEN + 1;
+  int minSessionid = currentSessionId - MAX_SESSION_DIFF + 1;
   
   ArrayList<Result> queries = new ArrayList<Result>();
   ArrayList<Result> clicks = new ArrayList<Result>();
   HashMap<String, String> titles = new HashMap<String, String>();
   
-  Ranker.rank(minSessionid, maxSessionid, username, db, queries, clicks);
-  PageParser.PageSummarizer(clicks, titles, db);
+  Ranker.rank(minSessionid, maxSessionid, username, db, queries, clicks, titles);
   
-  int qLen = queries.size() > MAX ? MAX : queries.size();
-  int cLen = clicks.size() > MAX ? MAX : clicks.size();
+  int qLen = queries.size() > MAX_ITEMS ? MAX_ITEMS : queries.size();
+  int cLen = clicks.size() > MAX_ITEMS ? MAX_ITEMS : clicks.size();
   
-  if(qLen == 0 && cLen == 0) {
-      
-  }
-  
-  
+  if(qLen > 0) {
 %>
 <div style="height:250px;border: 3px solid #eaeaea;">
 <div style="background-color:#E6E6FA;font-size:20px;font-weight:bold;padding:5px;">
@@ -31,7 +25,7 @@ Recent queries:
  <%
    for(int i = 0; i < qLen; i++) {
  %>
- <a href="index.jsp?username=<%=username%>&query=<%=queries.get(i).item%>" style="font-szie:17px"><%=queries.get(i).item%></a>&nbsp;&nbsp;&nbsp;
+ <a href="index.jsp?query=<%=queries.get(i).item%>" style="font-szie:17px"><%=queries.get(i).item%></a>&nbsp;&nbsp;&nbsp;
  <%
    }
  %>
@@ -41,7 +35,7 @@ Recent queries:
 <%
    for(int i = 0; i < cLen; i++) {
 %>
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="<%=clicks.get(i).item%>">
+&nbsp;&nbsp;&nbsp;<a href="<%=clicks.get(i).item%>">
    <% 
    String url = clicks.get(i).item;
    if(titles.containsKey(url)) {
@@ -52,6 +46,7 @@ Recent queries:
    %></a><br/>
 <%
    }
+}
 %>
 </div>
 </div>	  	    
