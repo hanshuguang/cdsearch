@@ -1,5 +1,6 @@
 package edu.pitt.sis.searcher;
 
+import edu.pitt.sis.common.Configer;
 import edu.pitt.sis.common.Reader;
 import edu.pitt.sis.common.Webpage;
 import java.io.IOException;
@@ -10,14 +11,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class SerpReader extends SearcherReader {
+public class SerpReader {
     
     public static Webpage readPage(String userAgent, String charset,
             String meta, ArrayList<String> values, String query) {
         Webpage webpage = new Webpage();
         try {            
-            String url = PROP.getProperty("searchurl").toString();
-            String[] paras = PROP.getProperty("searchparams").split(";");
+            String url = Configer.PROP.getProperty("searchurl").toString();
+            String[] paras = Configer.PROP.getProperty("searchparams").split(";");
             for(int index = 0; index < paras.length; index++) {
                 url += "&" + paras[index] + "=" + URLEncoder.encode(values.get(index), charset);
             }
@@ -43,7 +44,7 @@ public class SerpReader extends SearcherReader {
         fixedURLs(doc, meta, userAgent);
 
         Element body = doc.select("body").first();
-        body.html(PROP.getProperty("container").replace("$content$", body.html()));
+        body.html(Configer.PROP.getProperty("container").replace("$content$", body.html()));
         
         webpage.title = doc.title();
         webpage.html = doc.outerHtml();
@@ -52,7 +53,7 @@ public class SerpReader extends SearcherReader {
     }
 
     public static void removeElements(Document doc) {
-        for(String selector : PROP.getProperty("serpremovedselectors").split(";")) {
+        for(String selector : Configer.PROP.getProperty("serpremovedselectors").split(";")) {
             Elements eles = doc.select(selector);
             if(eles == null) {
                 return;
@@ -66,8 +67,8 @@ public class SerpReader extends SearcherReader {
     }
 
     private static void fixedURLs(Document doc, String meta, String userAgent) {
-        String localURL = PROP.getProperty("servername")
-            + PROP.getProperty("localpageurl");
+        String localURL = Configer.PROP.getProperty("servername")
+            + Configer.PROP.getProperty("localpageurl");
         
         Elements links = doc.select("a[href]");
         for(int index = 0; index < links.size(); index++){
@@ -96,15 +97,29 @@ public class SerpReader extends SearcherReader {
     
     public static void fixPagination(Document doc, String meta) {
         // Fixes the pagination
-        if(PROP.get("searchengine").equals("Bing")) {
+        if(Configer.PROP.get("searchengine").equals("Bing")) {
             BingPagination(doc, meta);
+        } else if (Configer.PROP.get("searchengine").equals("Google")) {
+            
         }
     }
     
     public static void BingPagination(Document doc, String meta) {
-        Elements pages = doc.select(PROP.get("serppagination").toString());
-        String serpsearchurl = PROP.get("servername").toString()
-            + PROP.get("localsearchurl").toString();        
+        Elements pages = doc.select(Configer.PROP.get("serppagination").toString());
+        String serpsearchurl = Configer.PROP.get("servername").toString()
+            + Configer.PROP.get("localsearchurl").toString();        
+                
+        for(int index = 0; index < pages.size(); index++){
+            String urlnew = pages.get(index).attr("href");
+            String pageno = (urlnew + "&").split("first=")[1].split("&")[0];
+            pages.get(index).attr("href", serpsearchurl + "first=" + pageno + "&" + meta);			
+        }
+    }    
+    
+    public static void GooglePagination(Document doc, String meta) {
+        Elements pages = doc.select(Configer.PROP.get("serppagination").toString());
+        String serpsearchurl = Configer.PROP.get("servername").toString()
+            + Configer.PROP.get("localsearchurl").toString();        
                 
         for(int index = 0; index < pages.size(); index++){
             String urlnew = pages.get(index).attr("href");

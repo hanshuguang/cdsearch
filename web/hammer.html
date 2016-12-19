@@ -66,52 +66,47 @@
             var deltaX = event.deltaX;
             var deltaY = event.deltaY;
             var deltaTime = event.deltaTime;
-            var distance = event.distance;
-
-            var direction = event.direction;
+            
             var angle = event.angle;
 
             var velocityX = event.velocityX;
             var velocityY = event.velocityY;
-            var velocity = event.velocity;
-
-            var touches = event.scale;
 
             var centerX = event.center.x;
             var centerY = event.center.y;
 
-            var events = type + " " + touches + " " + centerX + " " + centerY + " "
-              + deltaX + " " + deltaY + " " + deltaTime + " " + distance + " "
-              + velocityX + " " + velocityY + " " + velocity + " "
-              + angle + " " + direction + "::";
+            var events = centerX + " " + centerY + " " + deltaX + " " + deltaY
+              + " " + deltaTime + " " + velocityX + " " + velocityY
+              + " " + angle + "::";
 
             if(type == 'panup') {
-              document.getElementById('panup').value += events;
+                document.getElementById('panup').value = events;
             } else if(type == 'pandown') {
-              document.getElementById('pandown').value += events;
+              document.getElementById('pandown').value = events;
             } else if(type == 'panleft') {
-              document.getElementById('panleft').value += events;
+                document.getElementById('panleft').value = events;
             } else if(type == 'panright') {
-              document.getElementById('panright').value += events;
+                document.getElementById('panright').value = events;
             }else if(type == 'press') {
-              document.getElementById('press').value += events;
+                document.getElementById('press').value = events;
             } else if(type == 'panend' || type == 'pressup') {
-              var html = event.target.innerHTML;
+                var html = event.target.innerHTML;
+                if(event.target.tagName.toLowerCase() == 'strong'
+                  || event.target.tagName.toLowerCase() == 'span') {
+                        html = event.target.parentElement.innerHTML;
+                }
 
-            if(event.target.tagName.toLowerCase() == 'strong'
-              || event.target.tagName.toLowerCase() == 'span') {
-                    html = event.target.parentElement.innerHTML;
-            }
-
-            var panupdata = document.getElementById('panup').value;
-            var pandowndata = document.getElementById('pandown').value;
-            var pressdata = document.getElementById('press').value;
-            var panleftdata = document.getElementById('panleft').value;
-            var panrightdata = document.getElementById('panright').value;
-            var data = "<pl>" + panleftdata + "</pl> " + "<pr>" + panrightdata + "</pr>"
-                    + "<pu>" + panupdata + "</pu> " + "<pd>" + pandowndata + "</pd>"
+                var panupdata = document.getElementById('panup').value;
+                var pandowndata = document.getElementById('pandown').value;
+                var pressdata = document.getElementById('press').value;
+                var panleftdata = document.getElementById('panleft').value;
+                var panrightdata = document.getElementById('panright').value;
+                var data = "<pl>" + panleftdata + "</pl> "
+                    + "<pr>" + panrightdata + "</pr>"
+                    + "<pu>" + panupdata + "</pu> "
+                    + "<pd>"  + pandowndata + "</pd>"
                     + "<ps>" + pressdata + "</ps> ";
-              updatelogs(data, html);
+                updatelogs(data, html);
             }	
         });
     }

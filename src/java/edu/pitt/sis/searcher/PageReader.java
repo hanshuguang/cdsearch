@@ -1,5 +1,6 @@
 package edu.pitt.sis.searcher;
 
+import edu.pitt.sis.common.Configer;
 import java.io.IOException;
 
 import org.jsoup.Jsoup;
@@ -9,7 +10,7 @@ import org.jsoup.select.Elements;
 import edu.pitt.sis.common.Reader;
 import edu.pitt.sis.common.Webpage;
 
-public class PageReader extends SearcherReader {
+public class PageReader {
     
     public static Webpage readPage(String url, String charset,
             String userAgent, String meta) {
@@ -26,7 +27,7 @@ public class PageReader extends SearcherReader {
     }
     
     public static boolean shouldRedirect(String url) {        
-        for(String fType : PROP.getProperty("redirectpages").toString().split(";")) {
+        for(String fType : Configer.PROP.getProperty("redirectpages").toString().split(";")) {
             if(url.endsWith(fType)) {
                 return true;
             }
@@ -49,8 +50,8 @@ public class PageReader extends SearcherReader {
         for(int index = 0; index < links.size(); index++){
             String urlnew = links.get(index).attr("abs:href");
 
-            String urlBase = PROP.getProperty("servername").toString()
-               + PROP.getProperty("localviewurl").toString();
+            String urlBase = Configer.PROP.getProperty("servername").toString()
+               + Configer.PROP.getProperty("localviewurl").toString();
             String newLinkUrl = urlBase + meta + "&cdsearchurl=" + urlnew;
             links.get(index).attr("href",  newLinkUrl);
 

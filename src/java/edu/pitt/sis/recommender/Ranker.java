@@ -16,9 +16,9 @@ public class Ranker {
             ArrayList<Result> clicks, HashMap<String, String> titles) {
 
         String sql = "SELECT title, timeinterval, pageType, query, pageUrl "
-                + "FROM pageevents WHERE username = '"
-                + username + "' AND sessionid >= " + minSessionId
-                + " AND sessionid <= " + maxSessionId;
+            + "FROM pageevents WHERE username = '"
+            + username + "' AND sessionid >= " + minSessionId
+            + " AND sessionid <= " + maxSessionId;
 
         ArrayList<String> cols = new ArrayList<String>();
         cols.add("title");

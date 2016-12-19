@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="common.jsp"%>
 
-<title>Crystal - Search Page</title>
-
 <form method="get" action="search.jsp" id="form-query">
     <input type = "hidden" name="username" id="username" value="<%=username%>" />
     <% if(isMobile) { %>

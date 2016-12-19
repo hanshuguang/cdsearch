@@ -25,7 +25,7 @@ Recent queries:
  <%
    for(int i = 0; i < qLen; i++) {
  %>
- <a href="index.jsp?query=<%=queries.get(i).item%>" style="font-szie:17px"><%=queries.get(i).item%></a>&nbsp;&nbsp;&nbsp;
+ <a href="search.jsp?query=<%=queries.get(i).item%>" target="_blank" style="font-size:17px"><%=queries.get(i).item%></a>&nbsp;&nbsp;&nbsp;
  <%
    }
  %>
@@ -35,7 +35,7 @@ Recent queries:
 <%
    for(int i = 0; i < cLen; i++) {
 %>
-&nbsp;&nbsp;&nbsp;<a href="<%=clicks.get(i).item%>">
+&nbsp;&nbsp;&nbsp;<a href="<%=clicks.get(i).item%>" target="_blank">
    <% 
    String url = clicks.get(i).item;
    if(titles.containsKey(url)) {

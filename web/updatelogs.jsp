@@ -1,16 +1,17 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="common.jsp"%>
 
 <%   	
     String pageUrl = request.getParameter("pageUrl");
     if(pageUrl == null) pageUrl = "";
-    pageUrl = new String(pageUrl.getBytes("ISO-8859-1"),"utf-8");
+//    pageUrl = new String(pageUrl.getBytes("ISO-8859-1"),"utf-8");
 
     String events = request.getParameter("event");
     if(events == null) events = "";
 
     String touchHtml = request.getParameter("touchHtml");
     if(touchHtml == null) touchHtml = "";
-    touchHtml = new String(touchHtml.getBytes("ISO-8859-1"),"utf-8");
+//    touchHtml = new String(touchHtml.getBytes("ISO-8859-1"),"utf-8");
 
     String pageType = request.getParameter("pageType");
     if(pageType == null) pageType = "";
