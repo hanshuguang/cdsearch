@@ -1,5 +1,7 @@
 package edu.pitt.sis.common;
 
+import java.util.HashMap;
+
 public class Webpage {
     public String html = null;
     public String url = null;

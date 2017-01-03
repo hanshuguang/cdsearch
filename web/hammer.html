@@ -21,7 +21,7 @@
 
     function logReading() {
       var interval = new Date().getTime() - time;
-      updatePageEvent(action + "->unload", interval);
+      updatePageEvent(action + "->touch", interval);
       time = new Date().getTime();
     }
 

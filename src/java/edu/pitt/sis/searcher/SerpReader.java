@@ -2,10 +2,12 @@ package edu.pitt.sis.searcher;
 
 import edu.pitt.sis.common.Configer;
 import edu.pitt.sis.common.Reader;
-import edu.pitt.sis.common.Webpage;
+import edu.pitt.sis.common.Result;
+import edu.pitt.sis.common.Serppage;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,17 +15,15 @@ import org.jsoup.select.Elements;
 
 public class SerpReader {
     
-    public static Webpage readPage(String userAgent, String charset,
+    public static Serppage readPage(String userAgent, String charset,
             String meta, ArrayList<String> values, String query) {
-        Webpage webpage = new Webpage();
-        try {            
+        Serppage webpage = new Serppage();        
+        try {
             String url = Configer.PROP.getProperty("searchurl").toString();
             String[] paras = Configer.PROP.getProperty("searchparams").split(";");
             for(int index = 0; index < paras.length; index++) {
                 url += "&" + paras[index] + "=" + URLEncoder.encode(values.get(index), charset);
             }
-            System.out.println("url=" + url);
-            System.out.println("query=" + query);
             String html = Reader.readByUrl(url, userAgent, charset);
             cleanByJSoup(userAgent, meta, html, url, query, webpage);
         } catch(IOException ioe) {
@@ -34,14 +34,15 @@ public class SerpReader {
     
     
     public static void cleanByJSoup(String userAgent, String meta,
-            String html, String url, String query, Webpage webpage) {
+            String html, String url, String query, Serppage webpage) {
         
         Document doc = Jsoup.parse(html, url);
         doc.title("Search Results for " + query);
         fixPagination(doc, meta);
         removeElements(doc);
         
-        fixedURLs(doc, meta, userAgent);
+        HashMap<String, String> resultURL2Id = new HashMap<String, String>();
+        fixURLs(doc, meta, userAgent, resultURL2Id);
 
         Element body = doc.select("body").first();
         body.html(Configer.PROP.getProperty("container").replace("$content$", body.html()));
@@ -50,15 +51,17 @@ public class SerpReader {
         webpage.html = doc.outerHtml();
         webpage.url = url;
         webpage.timestamp = System.currentTimeMillis() + "";
+        webpage.URL2Ids = resultURL2Id;
     }
 
     public static void removeElements(Document doc) {
         for(String selector : Configer.PROP.getProperty("serpremovedselectors").split(";")) {
             Elements eles = doc.select(selector);
+            
             if(eles == null) {
                 return;
             }
-
+            
             for(int index = 0; index < eles.size(); index++){
                 Element ele = eles.get(index);
                 ele.remove();
@@ -66,19 +69,30 @@ public class SerpReader {
         }
     }
 
-    private static void fixedURLs(Document doc, String meta, String userAgent) {
+    private static void fixURLs(Document doc, String meta, String userAgent,
+            HashMap<String, String> resultURL2Id) {
         String localURL = Configer.PROP.getProperty("servername")
             + Configer.PROP.getProperty("localpageurl");
         
+        int idstart = 0;
+        
         Elements links = doc.select("a[href]");
         for(int index = 0; index < links.size(); index++){
-            String urlnew = links.get(index).attr("abs:href");
+            Element cLink = links.get(index);
+            String urlnew = cLink.attr("abs:href");
+            
+            if(!urlnew.contains(localURL)) {
+                String serpId = "crystal-serp-" + (idstart++);
+                cLink.attr("id", serpId);
+                resultURL2Id.put(urlnew, serpId);
+            }
+            
             String newLinkUrl = urlnew.contains(localURL)
-                    ? urlnew : "view.jsp?" + meta + "&cdsearchurl=" + urlnew;
-            links.get(index).attr("href",  newLinkUrl);
+                ? urlnew : "view.jsp?" + meta + "&cdsearchurl=" + urlnew;
+            cLink.attr("href",  newLinkUrl);
 
             if(userAgent.contains("Mobile") || userAgent.contains("Android")) {
-                    links.get(index).attr("onclick",  "logReading()");;
+                cLink.attr("onclick",  "logReading()");
             }
         }
 
@@ -90,8 +104,8 @@ public class SerpReader {
 
         Elements imports = doc.select("link[href]");
         for(int index = 0; index < imports.size(); index++){
-                String urlnew = imports.get(index).attr("abs:href");
-                imports.get(index).attr("href", urlnew);
+            String urlnew = imports.get(index).attr("abs:href");
+            imports.get(index).attr("href", urlnew);
         }
     }
     
@@ -100,7 +114,7 @@ public class SerpReader {
         if(Configer.PROP.get("searchengine").equals("Bing")) {
             BingPagination(doc, meta);
         } else if (Configer.PROP.get("searchengine").equals("Google")) {
-            
+            GooglePagination(doc, meta);
         }
     }
     

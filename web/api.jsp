@@ -19,7 +19,7 @@
             responseText = results.size() > 0 ? "success" : "fail";
             session.setAttribute("username", username);
     }
-
+    
     if(type.equals("logout")) {
         session.invalidate();
     }

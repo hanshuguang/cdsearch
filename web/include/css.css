@@ -1,0 +1,51 @@
+.index-font {
+    font-family: Palatino Linotype;
+}
+
+.ranker-container {
+    height:300px;
+    border:3px solid #eaeaea;
+    font-family: Palatino Linotype;
+}
+
+.ranker-title {
+    background-color: #E6E6FA;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.lightbg {
+    background-color:#EAEAEA;
+}
+
+.margin-top-small {
+    margin-top:30px;
+}
+
+.ranker-body{
+    font-size:18px;
+    line-height: 200%;
+}
+
+.ranker-meta {
+    font-size:15px;
+    color:#7F7A7A;
+}
+
+.ranker-meta-serp {
+    font-size:15px;
+    color:#7F7A7A;
+    line-height: 175%;
+}
+
+.crystal-footer {
+    position:fixed;
+    bottom:0px;
+    padding:5px;
+    width:100%;
+    height:70px;
+    border:0px;
+    left:0px;
+    background-color:#eaeaea;
+}

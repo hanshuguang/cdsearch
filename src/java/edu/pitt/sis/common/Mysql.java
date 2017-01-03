@@ -69,8 +69,8 @@ public class Mysql {
             rs = st.executeQuery(sql);
             while(rs.next()){
                 ArrayList<String> result = new ArrayList<String>();
-                for(String col : cols) {
-                    result.add(rs.getString(col));
+                for(int i = 0; i < cols.size(); i++) {
+                    result.add(rs.getString(cols.get(i)));
                 }
                 results.add(result);
             }

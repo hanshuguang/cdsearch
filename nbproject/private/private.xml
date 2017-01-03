@@ -3,9 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/webapps/BeeTrace/src/java/edu/pitt/sis/searcher/SearcherReader.java</file>
             <file>file:/C:/webapps/BeeTrace/src/java/edu/pitt/sis/recommender/Ranker.java</file>
-            <file>file:/C:/webapps/BeeTrace/src/java/edu/pitt/sis/common/Reader.java</file>
+            <file>file:/C:/webapps/BeeTrace/web/ranker.jsp</file>
+            <file>file:/C:/webapps/BeeTrace/web/search.jsp</file>
+            <file>file:/C:/webapps/BeeTrace/web/include/css.css</file>
+            <file>file:/C:/webapps/BeeTrace/web/include/util.js</file>
+            <file>file:/C:/webapps/BeeTrace/src/java/edu/pitt/sis/searcher/SerpHighlighter.java</file>
+            <file>file:/C:/webapps/BeeTrace/web/index.jsp</file>
+            <file>file:/C:/webapps/BeeTrace/src/java/edu/pitt/sis/searcher/SerpReader.java</file>
+            <file>file:/C:/webapps/BeeTrace/src/java/edu/pitt/sis/common/Util.java</file>
         </group>
     </open-files>
 </project-private>

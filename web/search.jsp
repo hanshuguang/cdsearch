@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@include file="common.jsp"%>
-
+<link rel="stylesheet" href="include/css.css">
 <form method="get" action="search.jsp" id="form-query">
     <input type = "hidden" name="username" id="username" value="<%=username%>" />
     <% if(isMobile) { %>
@@ -11,21 +11,25 @@
 </form>
 
 <%
+String result = "";
 if(!query.equals("")) {
     String pageType = "serp";
-    String meta = "username=" + username + "&query=" + URLEncoder.encode(query, "utf-8");
+    String meta = "username=" + username + "&query="
+      + URLEncoder.encode(query, "utf-8");
     ArrayList<String> values = new ArrayList<String>();
     values.add(query);
     values.add(first);
-
-    Webpage webpage = SerpReader.readPage(userAgent, "utf-8", meta, values, query);
+    
+    Serppage webpage = SerpReader.readPage(userAgent, "utf-8", meta,
+        values, query);
+    result = SerpHighlighter.highlighter(username, db, webpage);
     out.println(webpage.html);
-
+    
     // Records HTML sources.
     String sql = "INSERT INTO htmls(username, timestamp, sessionid, device, "
-            + "userAgent, pageType, pageUrl, query, html, title) VALUES"
-            + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    ArrayList<String> paras = new ArrayList<String>();
+        + "userAgent, pageType, pageUrl, query, html, title) VALUES"
+        + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    ArrayList<String> paras = new ArrayList<>();
     paras.add(username);
     paras.add(webpage.timestamp);
     paras.add(currentSessionId + "");
@@ -39,10 +43,15 @@ if(!query.equals("")) {
     Mysql.executeUpdatewithPreparedStaement(db, sql, paras);
 %>
     <input type="hidden" id="pagetype" value="<%=pageType%>" />
-    <input type="hidden" id="query" value="<%=URLEncoder.encode(query, "utf-8")%>" />
+    <input type="hidden" id="query"  value="<%=URLEncoder.encode(query, "utf-8")%>" />
     <input type="hidden" id="url" value="<%=URLEncoder.encode(webpage.url, "utf-8")%>" />
     
     <%@include file="hammer.html"%>
 <%
 }
 %>
+
+<script language="javascript">
+    displayVisits('<%=result%>');
+</script>
+    
