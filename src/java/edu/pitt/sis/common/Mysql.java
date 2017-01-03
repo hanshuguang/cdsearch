@@ -45,10 +45,11 @@ public class Mysql {
 
     public static void executeUpdatewithPreparedStaement(String db,
             String sql, ArrayList<String> paras){
-        try	{
+        try {
             Connection conn = Mysql.getConn(db);
             PreparedStatement st = conn.prepareStatement(sql);
             for(int i = 1; i <= paras.size(); i++) {
+                System.out.println(i);
                 st.setString(i, paras.get(i - 1));
             }
             st.executeUpdate();

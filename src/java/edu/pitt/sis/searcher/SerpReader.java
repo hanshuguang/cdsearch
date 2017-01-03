@@ -2,7 +2,6 @@ package edu.pitt.sis.searcher;
 
 import edu.pitt.sis.common.Configer;
 import edu.pitt.sis.common.Reader;
-import edu.pitt.sis.common.Result;
 import edu.pitt.sis.common.Serppage;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -69,7 +68,7 @@ public class SerpReader {
         }
     }
 
-    private static void fixURLs(Document doc, String meta, String userAgent,
+    public static void fixURLs(Document doc, String meta, String userAgent,
             HashMap<String, String> resultURL2Id) {
         String localURL = Configer.PROP.getProperty("servername")
             + Configer.PROP.getProperty("localpageurl");

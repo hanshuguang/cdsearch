@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class Util {
@@ -16,20 +15,20 @@ public class Util {
         int[] sessionids = new int[2];
     	
     	String sql = "SELECT timestamp, sessionid FROM htmls WHERE username = '"
-    			+ user + "' ORDER BY timestamp DESC LIMIT 1";
+            + user + "' ORDER BY timestamp DESC LIMIT 1";
 
-    	ArrayList<String> cols = new ArrayList<String>();
+    	ArrayList<String> cols = new ArrayList<>();
     	cols.add("timestamp");
     	cols.add("sessionid");
     	ArrayList<ArrayList<String>> records = Mysql.executeQuery(db, sql, cols);
     	
     	if(records.size() >= 1) {
-    		long max = Long.parseLong(records.get(0).get(0));				
-		int sid = Integer.parseInt(records.get(0).get(1));
-    		sessionids[0] = sid;
-    		if((timestamp - max) > 1800000) {
-                    sessionids[1] = 1;
-		}
+            long max = Long.parseLong(records.get(0).get(0));				
+            int sid = Integer.parseInt(records.get(0).get(1));
+            sessionids[0] = sid;
+            if((timestamp - max) > 1800000) {
+                sessionids[1] = 1;
+            }
     	}
         return sessionids;
     }
@@ -57,7 +56,7 @@ public class Util {
         } else {
             long days = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis()
                     - timeInMilliseconds);
-            formatted = days + " days ago";
+            formatted = (days + 1) + " days ago";
         }        
         return formatted;
     }

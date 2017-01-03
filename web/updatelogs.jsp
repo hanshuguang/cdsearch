@@ -41,13 +41,13 @@
       
     String sql = "";
     if(logType.equals("pageevent")) {
-       sql = "INSERT INTO pageevents(username, timestamp, sessionid, device, userAgent, pageType, pageUrl, query, title, eventType, timeinterval)"
+      sql = "INSERT INTO pageevents(username, timestamp, sessionid, device, userAgent, pageType, pageUrl, query, title, eventType, timeinterval)"
         + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";      
       paras.add(eventType);
       paras.add(interval);
     } else if(logType.equals("mtievent")) {
        sql = "INSERT INTO mtievents(username, timestamp, sessionid, device, userAgent, pageType, pageUrl, query, title, html, events)"
-        + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";        
+        + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         paras.add(touchHtml);
         paras.add(events);
     }

@@ -1,5 +1,6 @@
 package edu.pitt.sis.recommender;
 
+import edu.pitt.sis.common.Configer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,8 +11,8 @@ import edu.pitt.sis.common.Mysql;
 import edu.pitt.sis.common.Result;
 
 public class Ranker {
-
-    public static final double DECAY = 0.6;
+    public static final double DECAY =
+        Double.parseDouble(Configer.PROP.getProperty("rankerdecay"));
 
     public static ArrayList<ArrayList<String>> loadUserHistory(int minSessionId,
             int maxSessionId, String username, String db) {
@@ -92,7 +93,6 @@ public class Ranker {
         cItem.score += dwell * Math.exp(-1.0 * DECAY * score);
         itemScores.put(item, cItem);
     }
-    
 
     public static void sort(ArrayList<Result> itemScores) {
         Collections.sort(itemScores, new Comparator<Result>() {

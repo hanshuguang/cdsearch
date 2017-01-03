@@ -8,16 +8,24 @@
 
     String password = request.getParameter("password");
     if(password == null) password = "";
+    
+    String db = "cdsearch";
+    
+    String ipaddress = request.getRemoteAddr();
+    if(ipaddress == null) ipaddress = "";
 
     String responseText = "";
     if(type.equals("login")) {
-            ArrayList<String> cols = new ArrayList<String>();
-            cols.add("username");
-            String sql = "SELECT username FROM users WHERE username = '"
-                    + username + "' AND password = '" + password + "';";
-            ArrayList<ArrayList<String>> results = Mysql.executeQuery("cdsearch", sql, cols);
-            responseText = results.size() > 0 ? "success" : "fail";
-            session.setAttribute("username", username);
+        ArrayList<String> cols = new ArrayList<String>();
+        cols.add("username");
+        String sql = "SELECT username FROM users WHERE username = '"
+                + username + "' AND password = '" + password + "';";
+        ArrayList<ArrayList<String>> results = Mysql.executeQuery(db, sql, cols);
+        responseText = results.size() > 0 ? "success" : "fail";
+        
+        
+        
+        session.setAttribute("username", username);
     }
     
     if(type.equals("logout")) {
