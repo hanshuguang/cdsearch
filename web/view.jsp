@@ -45,9 +45,10 @@
 %>
 
 <input type = "hidden" name="username" id="username" value="<%=username%>" />
-<input type="hidden" id="pagetype" value="<%=pageType%>" />
-<input type="hidden" id="query" value="<%=URLEncoder.encode(query, "utf-8")%>" />
-<input type="hidden" id="url" value="<%=URLEncoder.encode(url, "utf-8")%>" />
+<input type = "hidden" name="device" id="device" value="<%=device%>" />
+<input type= "hidden" id="pagetype" value="<%=pageType%>" />
+<input type= "hidden" id="query" value="<%=URLEncoder.encode(query, "utf-8")%>" />
+<input type= "hidden" id="url" value="<%=URLEncoder.encode(url, "utf-8")%>" />
 
 <%@include file="hammer.html"%>
 

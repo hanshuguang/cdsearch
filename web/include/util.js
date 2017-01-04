@@ -36,20 +36,40 @@ function generateFooter(device) {
 
 function displayVisits(content) {
     var array = content.split(";");
+    
+    // Stores inner HTML
+    var htmls = {};
+    for(var i = 0; i < array.length - 1; i++) {
+        if(array[i] == '') {
+            continue;
+        }
+        var meta = array[i].split(',');
+        var id = meta[1];
+        htmls[id] = document.getElementById(id).innerHTML;
+        document.getElementById(id).innerHTML = '';
+    }
+    
     for(var i = 0; i < array.length; i++) {
         if(array[i] == '') {
             continue;
         }
         
         var meta = array[i].split(',');
-        var id = meta[0];
-        var query = meta[1];
-        var time = meta[2];
-        var device = meta[3];
-        // Alter content in HTML
-        var ele = document.createElement("div");
-        ele.className = 'ranker-meta-serp';
-        ele.innerHTML = "<b>" + time + "</b> on <img src='images/logo-" + device.toLowerCase() + ".png' width='15px'></img> with query <b>" + query + "</b>";
-        document.getElementById(id).parentElement.appendChild(ele);
+        var newid = meta[0];
+        var id = meta[1];
+        document.getElementById(newid).innerHTML = htmls[id];
+        
+        // Re-ranked results. Now, we attach the visit information.
+        if(meta.length > 4) {
+            var query = meta[3];
+            var time = meta[4];
+            var device = meta[5];
+            // Alter content in HTML
+            var ele = document.createElement("div");
+            ele.className = 'ranker-meta-serp';
+            ele.innerHTML = "<img src='images/indicator-visit.png' width='15px'></img>&nbsp;<b>" + time + "</b> on <img src='images/logo-" + device.toLowerCase() + ".png' width='15px'></img> with query <b>" + query + "</b>";
+            document.getElementById(newid).appendChild(ele);
+        }
+        
     }
 }

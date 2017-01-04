@@ -22,7 +22,7 @@ if(!query.equals("")) {
     
     Serppage webpage = SerpReader.readPage(userAgent, "utf-8", meta,
         values, query);
-    result = SerpHighlighter.highlighter(username, db, webpage);
+    result = SerpRanker.rerank(username, db, webpage, device);
     out.println(webpage.html);
     
     // Records HTML sources.
@@ -42,6 +42,8 @@ if(!query.equals("")) {
     paras.add(webpage.title);
     Mysql.executeUpdatewithPreparedStaement(db, sql, paras);
 %>
+    <input type = "hidden" name="username" id="username" value="<%=username%>" />
+    <input type = "hidden" name="device" id="device" value="<%=device%>" />
     <input type="hidden" id="pagetype" value="<%=pageType%>" />
     <input type="hidden" id="query"  value="<%=URLEncoder.encode(query, "utf-8")%>" />
     <input type="hidden" id="url" value="<%=URLEncoder.encode(webpage.url, "utf-8")%>" />

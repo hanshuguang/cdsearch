@@ -61,7 +61,7 @@ public class Util {
         return formatted;
     }
     
-     public static ArrayList<ArrayList<String>> loadHistoryByURL(String user,
+     public static ArrayList<ArrayList<String>> LoadHistoryByURL(String user,
             String db, HashMap<String, String> urls) {
         StringBuilder sb = new StringBuilder("");
         urls.entrySet().forEach((m) -> {

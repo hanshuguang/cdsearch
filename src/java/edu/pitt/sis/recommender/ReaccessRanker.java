@@ -10,7 +10,7 @@ import java.util.Map;
 import edu.pitt.sis.common.Mysql;
 import edu.pitt.sis.common.Result;
 
-public class Ranker {
+public class ReaccessRanker {
     public static final double DECAY =
         Double.parseDouble(Configer.PROP.getProperty("rankerdecay"));
 
@@ -80,7 +80,7 @@ public class Ranker {
         
         double dwell = Double.parseDouble(cArray.get(1)) / 1000.0;
         String device = cArray.get(5);
-        long recentTime = Long.parseLong(cArray.get(6));        
+        long recentTime = Long.parseLong(cArray.get(6));
         double score = (System.currentTimeMillis() - recentTime) / (1000.0 * 3600.0 * 24);
         
         Result cItem = itemScores.containsKey(item)

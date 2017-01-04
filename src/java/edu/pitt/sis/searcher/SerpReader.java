@@ -41,7 +41,9 @@ public class SerpReader {
         removeElements(doc);
         
         HashMap<String, String> resultURL2Id = new HashMap<String, String>();
-        fixURLs(doc, meta, userAgent, resultURL2Id);
+        parseSearchResults(doc, resultURL2Id);
+        
+        fixURLs(doc, meta, userAgent);
 
         Element body = doc.select("body").first();
         body.html(Configer.PROP.getProperty("container").replace("$content$", body.html()));
@@ -51,6 +53,31 @@ public class SerpReader {
         webpage.url = url;
         webpage.timestamp = System.currentTimeMillis() + "";
         webpage.URL2Ids = resultURL2Id;
+    }
+    
+    public static void parseSearchResults(Document doc,
+        HashMap<String, String> resultURL2Id) {
+        int idStart = 0;
+        for(String selector : Configer.PROP.getProperty("serpresultselectors").split(";")) {
+            Elements eles = doc.select(selector.split(",")[0]);
+            if(eles == null) {
+                return;
+            }
+            for(int index = 0; index < eles.size(); index++){
+                Element ele = eles.get(index);
+                String id = "crystal-serp-" + (idStart++);
+                ele.attr("id", id);
+                
+                String tag = selector.split(",")[1];
+                int nth = Integer.parseInt(selector.split(",")[2]);
+                Elements links = ele.select(tag);
+                if(links == null || links.size() <= nth) {
+                    continue;
+                }                
+                String link = links.get(nth).attr("abs:href");
+                resultURL2Id.put(link, id);
+            }
+        } 
     }
 
     public static void removeElements(Document doc) {
@@ -68,23 +95,14 @@ public class SerpReader {
         }
     }
 
-    public static void fixURLs(Document doc, String meta, String userAgent,
-            HashMap<String, String> resultURL2Id) {
+    public static void fixURLs(Document doc, String meta, String userAgent) {
         String localURL = Configer.PROP.getProperty("servername")
             + Configer.PROP.getProperty("localpageurl");
-        
-        int idstart = 0;
-        
+
         Elements links = doc.select("a[href]");
         for(int index = 0; index < links.size(); index++){
             Element cLink = links.get(index);
             String urlnew = cLink.attr("abs:href");
-            
-            if(!urlnew.contains(localURL)) {
-                String serpId = "crystal-serp-" + (idstart++);
-                cLink.attr("id", serpId);
-                resultURL2Id.put(urlnew, serpId);
-            }
             
             String newLinkUrl = urlnew.contains(localURL)
                 ? urlnew : "view.jsp?" + meta + "&cdsearchurl=" + urlnew;

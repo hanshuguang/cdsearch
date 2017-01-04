@@ -49,7 +49,6 @@ public class Mysql {
             Connection conn = Mysql.getConn(db);
             PreparedStatement st = conn.prepareStatement(sql);
             for(int i = 1; i <= paras.size(); i++) {
-                System.out.println(i);
                 st.setString(i, paras.get(i - 1));
             }
             st.executeUpdate();

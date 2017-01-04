@@ -23,7 +23,15 @@
         ArrayList<ArrayList<String>> results = Mysql.executeQuery(db, sql, cols);
         responseText = results.size() > 0 ? "success" : "fail";
         
-        
+        if(results.size() > 0) {
+            String sqlLocation = "INSERT INTO userlocations(username, ip, logtimesession)"
+                +" VALUES(?, ?, ?)";
+            ArrayList<String> paras = new ArrayList<>();
+            paras.add(username);
+            paras.add(ipaddress);
+            paras.add(System.currentTimeMillis() + "");
+            Mysql.executeUpdatewithPreparedStaement(db, sqlLocation, paras);
+        }
         
         session.setAttribute("username", username);
     }

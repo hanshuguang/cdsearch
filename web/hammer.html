@@ -13,45 +13,56 @@
     var pageType = document.getElementById("pagetype").value;
     var url = document.getElementById("url").value;
     var query = document.getElementById("query").value;
+    var device = document.getElementById("device").value;
     
     var container = document.getElementById('crystalcontainer');
 
     var action = "load";
     var time = new Date().getTime();
+    
+    setLogger();
+    
+    function setLogger() {
+        if(device == 'D') {
+            window.onload = function() {
+                action = "load";
+                time = new Date().getTime();
+            }
+
+            window.onfocus = function() {
+              action = "focus";
+              time = new Date().getTime();
+            }
+
+            window.onmousemove = function(event) {
+              if(event.pageY <= 10) {
+                var interval = new Date().getTime() - time;
+                if(interval > 1000) {
+                    updatePageEvent(action + "->move->unload", interval);
+                    time = new Date().getTime();
+                }
+              }
+            }
+
+            window.onblur = function() {
+              var interval = new Date().getTime() - time;
+              updatePageEvent(action + "->blur", interval);
+              time = new Date().getTime();
+            }
+
+            window.onbeforeunload = function() {
+              var interval = new Date().getTime() - time;
+              updatePageEvent(action + "->before->unload", interval);
+              time = new Date().getTime();
+            }
+        } else {
+            
+        }
+    }
 
     function logReading() {
       var interval = new Date().getTime() - time;
       updatePageEvent(action + "->touch", interval);
-      time = new Date().getTime();
-    }
-
-    window.onload = function() {
-      action = "load";
-      time = new Date().getTime();
-    }
-
-    window.onfocus = function() {
-      action = "focus";
-      time = new Date().getTime();
-    }
-
-    window.onmousemove = function(event) {
-      if(event.pageY <= 5) {
-        var interval = new Date().getTime() - time;	
-        updatePageEvent(action + "->unload", interval);
-        time = new Date().getTime();
-      }
-    }
-
-    window.onblur = function() {
-      var interval = new Date().getTime() - time;
-      updatePageEvent(action + "->blur", interval);
-      time = new Date().getTime();
-    }
-
-    window.onbeforeunload = function() {
-      var interval = new Date().getTime() - time;
-      updatePageEvent(action + "->unload", interval);
       time = new Date().getTime();
     }
 

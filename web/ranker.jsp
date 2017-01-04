@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="include/css.css">
 
 <%
-  final int MAX_SESSION_DIFF = 20;
+  final int MAX_SESSION_DIFF = 50;
   final int MAX_ITEMS = 3;
   // Uses the current and the past sessions to rank query terms, queries and clicks
   int maxSessionid = currentSessionId;
@@ -14,7 +14,7 @@
   ArrayList<Result> clicks = new ArrayList<>();
   HashMap<String, String> titles = new HashMap<>();
   
-  Ranker.rank(minSessionid, maxSessionid, username, db, queries, clicks, titles);
+  ReaccessRanker.rank(minSessionid, maxSessionid, username, db, queries, clicks, titles);
   int qLen = queries.size() > MAX_ITEMS ? MAX_ITEMS : queries.size();
   int cLen = clicks.size() > MAX_ITEMS ? MAX_ITEMS : clicks.size();
   
